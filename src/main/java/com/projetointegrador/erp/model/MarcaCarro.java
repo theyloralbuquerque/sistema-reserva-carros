@@ -19,4 +19,5 @@ public enum MarcaCarro {
 	public String getDescricao() {
 		return descricao;
 	}
+
 }

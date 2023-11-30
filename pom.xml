@@ -14,17 +14,23 @@
 	  <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
   
-  <dependencies>	
-	  
-	   <!-- WELD Dependency (weld é uma implementação dpo CDI) -->
+  <dependencies>
+
+		<dependency>
+			<groupId>org.eclipse.birt.runtime.3_7_1</groupId>
+			<artifactId>com.lowagie.text</artifactId>
+			<version>2.1.7</version>
+		</dependency>
+
+		<!-- WELD Dependency (weld é uma implementação dpo CDI) -->
 	   <dependency>
 			<groupId>org.jboss.weld.servlet</groupId>
 			<artifactId>weld-servlet</artifactId>
 			<version>2.4.8.Final</version>
 			<scope>compile</scope>
 		</dependency>
-	  
-	  	<!-- JSF Dependency -->
+
+		<!-- JSF Dependency -->
 		<dependency>
 			<groupId>org.glassfish</groupId>
 			<artifactId>javax.faces</artifactId>
@@ -79,6 +85,14 @@
 		    <artifactId>jaxb-runtime</artifactId>
 		    <version>2.3.2</version>
 		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/com.itextpdf/itextpdf -->
+		<dependency>
+			<groupId>com.itextpdf</groupId>
+			<artifactId>itextpdf</artifactId>
+			<version>5.5.13.3</version>
+		</dependency>
+
 	</dependencies>
   
   <build>

@@ -16,7 +16,7 @@
 	</f:metadata>	
 
 	<h:form id="frm"> 
-		<p:messages id="messages" closable="true" />
+		<p:messages id="messages" />
 		
 		<p:toolbar id="toolbar">
 			<f:facet name="left">
@@ -24,46 +24,58 @@
 					size="30" value="#{reservaCarrosBean.termoPesquisa}" />
 					
 				<span class="ui-separator">
-					<span class="pi pi-ellipsis-v"/>
-				</span>	
+	        		<span class="ui-icon ui-icon-grip-dotted-vertical" />
+	        	</span>
 				
 				<p:commandButton value="Pesquisar" icon="fa fa-search"
-					actionListener="#{reservaCarrosBean.pesquisar}" update="carrosDatatable messages "
-					process="@this termoPesquisa " />
+					actionListener="#{reservaCarrosBean.pesquisar}" update="carrosDatatable messages"
+					process="@this termoPesquisa"/>
 				
 				<span class="ui-separator">
-					<span class="pi pi-ellipsis-v"/>
-				</span>	
+	        		<span class="ui-icon ui-icon-grip-dotted-vertical" />
+	        	</span>
 	
-				<p:commandButton id="novo" value="Novo" icon="fa fa-plus-square"
+				<p:commandButton value="Novo" icon="fa fa-plus-square"
 					actionListener="#{reservaCarrosBean.prepararNovoCarro}"
+					oncomplete="PF('carroDialogWidgetVar').show()" 
+					update="carroDialog" process="@this">
+					<p:resetInput target="carroDialog"/>
+				</p:commandButton>
+	
+				<span class="ui-separator">
+	        		<span class="ui-icon ui-icon-grip-dotted-vertical" />
+	        	</span>	
+				
+				<p:commandButton title="Editar" icon="fa fa-edit" 
+					disabled="#{not reservaCarrosBean.carroSelecionado}"
+					actionListener="#{reservaCarrosBean.prepararEdicao}"
 					oncomplete="PF('carroDialogWidgetVar').show()" 
 					update="carroDialog" process="@this" >
 					<p:resetInput target="carroDialog"/>
 				</p:commandButton>
-	
-				<span class="ui-separator">
-					<span class="pi pi-ellipsis-v"/>
-				</span>	
 				
-				<p:commandButton title="Editar" icon="fa fa-edit" disabled="#{not reservaCarrosBean.carroSelecionado}"
-					actionListener="#{reservaCarrosBean.prepararEdicao}"
-					oncomplete="PF('carroDialogWidgetVar').show()" 
-					update="carroDialog" process="@this carroDialog" >
-					<p:resetInput target="carroDialog"/>
+				<p:commandButton title="Excluir" icon="fa fa-trash" 
+					disabled="#{not reservaCarrosBean.carroSelecionado}"
+					actionListener="#{reservaCarrosBean.excluir}"
+					update="messages carrosDatatable toolbar" 
+					process="@this" >
+					<p:confirm icon="ui-icon-alert" header="Confirmação de exclusão" 
+					message="Posso excluir o carro?" />
 				</p:commandButton>
 				
-				<p:commandButton title="Excluir" icon="pi pi-trash" disabled="#{not reservaCarrosBean.carroSelecionado}" />
-				
 				<span class="ui-separator">
-					<span class="pi pi-ellipsis-v"/>
-				</span>		
+	        		<span class="ui-icon ui-icon-grip-dotted-vertical" />
+	        	</span>		
 				
-				<p:commandButton value="Download" title="Download em PDF" icon="fa fa-file-pdf-o"/>
+				<p:commandButton value="Download" title="Download em PDF" icon="fa fa-file-pdf-o"
+					ajax="false">
+					<p:dataExporter type="pdf" target="carrosDatatable" fileName="Carros"/>
+				</p:commandButton>
 			</f:facet>
 		</p:toolbar>
 	
 		<p:spacer height="20px" />
+		
 		<p:dataTable id="carrosDatatable" value="#{reservaCarrosBean.listaCarros}"
 			var="carro" emptyMessage="Nenhuma informação a ser exibida"
 			paginator="true" rows="3" paginatorPosition="bottom"
@@ -97,7 +109,7 @@
 		<!-- Dialog (modal) "Novo" -->
 		<p:dialog id="carroDialog" header="Novo carro" widgetVar="carroDialogWidgetVar"
 			modal="true" resizable="false" closeOnEscape="true" >
-			<p:messages id="empresaMessages" />
+			<p:messages id="carroMessages" />
 			
 			<p:defaultCommand target="salvarCommandButton" scope="carroDialog" />
 			
@@ -108,14 +120,14 @@
 					value="#{reservaCarrosBean.carro.modelo}" />
 				
 				<p:outputLabel value="Ano do Modelo: " for="anoModelo" />
-				<p:inputText id="anoModelo" 
+				<p:inputText id="anoModelo" size="4" maxlength="4"
 					value="#{reservaCarrosBean.carro.anoModelo}" />
 				
 				<p:outputLabel value="Marca: " for="marca" />
 				<p:selectOneMenu id="marca" value="#{reservaCarrosBean.carro.marca}" >
 					<f:selectItem itemLabel="Selecione..." />
 					<f:selectItems value="#{reservaCarrosBean.marcasCarro}"
-						var="marcaCarro" itemLabel="#{marcaCarro.descricao}"
+						var="marcaCarro" itemLabel="#{marcaCarros.descricao}"
 						itemValue="#{marcaCarro}"/>
 				</p:selectOneMenu>
 				
@@ -136,7 +148,7 @@
 				
 				<p:outputLabel />
 				<p:commandButton id="salvarCommandButton" value="Salvar" actionListener="#{reservaCarrosBean.salvar}" 
-					update="carroPanelGrid empresaMessages " 
+					update="carroPanelGrid carroMessages" 
 					oncomplete="if (!args.ValidationFailed) PF('carroDialogWidgetVar').hide()" process="carroDialog" />
 			</h:panelGrid>
 		</p:dialog>

@@ -5,13 +5,16 @@ import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotEmpty;
-
 
 @Entity
 @Table(name = "carro")
@@ -23,29 +26,32 @@ public class Carro implements Serializable {
 	@Column(name = "id_carro")
 	private Long idCarro;
 	
-	@NotEmpty
-	@Column(name = "marca", nullable = false, length = 30)
-	private String marca;
+	@NotNull
+	@Enumerated(EnumType.STRING)
+	@Column(nullable = false, length = 30)
+	private MarcaCarro marca;
 	
 	@NotEmpty
 	@Column(name = "modelo", nullable = false, length = 20)
 	private String modelo;
 	
-	@NotEmpty
-	@Column(name = "ano_fabricacao")
+	@NotNull
+	@Column(name = "ano_fabricacao", nullable = false)
+	@Digits(integer = 4, fraction = 0)
 	private Integer anoFabricacao;
 	
-	@NotEmpty
-	@Column(name = "ano_modelo")
+	@NotNull
+	@Column(name = "ano_modelo", nullable = false)
+	@Digits(integer = 4, fraction = 0)
 	private Integer anoModelo;
 	
-	@NotEmpty
+	@NotNull
 	private Double valor;
 	
 	@NotEmpty
 	@Column(name = "descricao", length = 200)
 	private String descricao;
-	
+
 	/*
 	@ManyToOne // muitos-para-um.
 	@JoinColumn(name = "id_cliente") // Define a coluna id_cliente como FK na tabela Carro.
@@ -60,11 +66,11 @@ public class Carro implements Serializable {
 		this.idCarro = idCarro;
 	}
 	
-	public String getMarca() {
+	public MarcaCarro getMarca() {
 		return marca;
 	}
 	
-	public void setMarca(String marca) {
+	public void setMarca(MarcaCarro marca) {
 		this.marca = marca;
 	}
 	

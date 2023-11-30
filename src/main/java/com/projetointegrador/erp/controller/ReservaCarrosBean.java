@@ -49,9 +49,19 @@ public class ReservaCarrosBean implements Serializable{
 			pesquisar();
 		}
 		
-		messages.info("Empresa salva com sucesso!");
+		messages.info("Carro salvo com sucesso!");
 		
 		//PrimeFaces.current().ajax().update("frm:carrosDataTable", "frm:messages");
+	}
+	
+	public void excluir() {
+		cadastroCarroService.excluir(carro);
+		
+		carro = null;
+		
+		atualizarRegistros();
+		
+		messages.info("Carro excluído com sucesso!");
 	}
 	
 	public void pesquisar() {
@@ -64,6 +74,14 @@ public class ReservaCarrosBean implements Serializable{
 	
 	public void todosCarros() {
 		listaCarros = carroRepository.todos();
+	}
+	
+	private void atualizarRegistros() {
+		if (jaHouvePesquisa()) { 
+			pesquisar(); // Se já tiver acontecido a pesquisa desse termo, chama o método pesquisar(). 
+		} else {
+			todosCarros();
+		}
 	}
 	
 	private boolean jaHouvePesquisa() {
