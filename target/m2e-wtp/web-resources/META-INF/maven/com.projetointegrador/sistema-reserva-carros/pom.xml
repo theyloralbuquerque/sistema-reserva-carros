@@ -22,7 +22,7 @@
 			<version>2.1.7</version>
 		</dependency>
 
-		<!-- WELD Dependency (weld é uma implementação dpo CDI) -->
+		<!-- WELD Dependency (weld é uma implementação do CDI) -->
 	   <dependency>
 			<groupId>org.jboss.weld.servlet</groupId>
 			<artifactId>weld-servlet</artifactId>

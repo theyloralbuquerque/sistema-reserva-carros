@@ -1,11 +1,14 @@
 package com.projetointegrador.erp.controller;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+
+import org.primefaces.context.RequestContext;
 
 import com.projetointegrador.erp.model.Carro;
 import com.projetointegrador.erp.model.MarcaCarro;
@@ -45,11 +48,12 @@ public class ReservaCarrosBean implements Serializable{
 	public void salvar() {
 		cadastroCarroService.salvar(carro);
 		
-		if (jaHouvePesquisa()) {
-			pesquisar();
-		}
+		atualizarRegistros();
 		
 		messages.info("Carro salvo com sucesso!");
+		
+		RequestContext.getCurrentInstance().update(Arrays.asList(
+				"frm:carrosDatatable", "frm:messages"));
 		
 		//PrimeFaces.current().ajax().update("frm:carrosDataTable", "frm:messages");
 	}

@@ -16,7 +16,7 @@
 	</f:metadata>	
 
 	<h:form id="frm"> 
-		<p:messages id="messages" />
+		<p:messages id="messages"/>
 		
 		<p:toolbar id="toolbar">
 			<f:facet name="left">
@@ -50,7 +50,7 @@
 					disabled="#{not reservaCarrosBean.carroSelecionado}"
 					actionListener="#{reservaCarrosBean.prepararEdicao}"
 					oncomplete="PF('carroDialogWidgetVar').show()" 
-					update="carroDialog" process="@this" >
+					update="carroDialog messages" process="@this" >
 					<p:resetInput target="carroDialog"/>
 				</p:commandButton>
 				
@@ -135,14 +135,14 @@
 				<p:inputText id="anoFabricacao" mask="9999" 
 					value="#{reservaCarrosBean.carro.anoFabricacao}" />
 				
-				<p:outputLabel value="Preço: " for="valor" />
+				<p:outputLabel value="Preco: " for="valor" />
 				<h:panelGroup>
 					<p:inputText id="valor" value="#{reservaCarrosBean.carro.valor}" >
 						<f:convertNumber pattern="#,##0.00" />
 					</p:inputText>
 				</h:panelGroup>
 				
-				<p:outputLabel value="Descrição: " for="descricao" />
+				<p:outputLabel value="Descricao: " for="descricao" />
 				<p:inputText id="descricao" size="80" maxlength="200"
 					value="#{reservaCarrosBean.carro.descricao}" />
 				
