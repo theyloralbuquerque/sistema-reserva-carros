@@ -13,6 +13,10 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.NotEmpty;
 
 @Entity
 @Table(name = "usuario")
@@ -24,16 +28,28 @@ public class Usuario implements Serializable {
 	@Column(name = "id_usuario")
 	private Long idUsuario;
 	
+	@NotEmpty
+	@Column(nullable = false, length = 50)
 	private String email;
+	
+	@NotEmpty
+	@Column(nullable = false, length = 50)
 	private String senha;
+	
+	@NotEmpty
+	@Column(nullable = false, length = 50)
 	private String nome;
 	
+	@NotNull
 	@Column(nullable = false)
+	@Digits(integer = 1, fraction = 0)
 	private Integer ativo; 
 
 	@Temporal(TemporalType.DATE)
+	@Column(name = "data_nascimento", nullable = false)
 	private Date dataNascimento;
 	
+	@Column(name = "data_cadastro", nullable = false)
 	private Instant dataCadastro;
 
 	/*
@@ -41,8 +57,23 @@ public class Usuario implements Serializable {
 	private Set<Carro> carros = new HashSet<>();
 	*/
 	
+	
 	public Long getIdUsuario() {
 		return idUsuario;
+	}
+
+	public Usuario() {
+	}
+
+	public Usuario(Long idUsuario, String email, String senha, String nome, Integer ativo, Date dataNascimento) {
+		super();
+		this.idUsuario = idUsuario;
+		this.email = email;
+		this.senha = senha;
+		this.nome = nome;
+		this.ativo = ativo;
+		this.dataNascimento = dataNascimento;
+		dataCadastro = Instant.now();
 	}
 
 	public void setIdUsuario(Long idUsuario) {
@@ -94,7 +125,7 @@ public class Usuario implements Serializable {
 	}
 
 	public void setDataCadastro(Instant dataCadastro) {
-		this.dataCadastro = dataCadastro;
+		this.dataCadastro = Instant.now();
 	}
 	
 	/*

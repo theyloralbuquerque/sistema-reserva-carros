@@ -71,6 +71,12 @@
 					ajax="false">
 					<p:dataExporter type="pdf" target="carrosDatatable" fileName="Carros"/>
 				</p:commandButton>
+				
+				<span class="ui-separator">
+	        		<span class="ui-icon ui-icon-grip-dotted-vertical" />
+	        	</span>	
+				
+				<p:commandLink value="Usuários" action="#{reservaCarrosBean.usuario}" />
 			</f:facet>
 		</p:toolbar>
 	
@@ -120,7 +126,7 @@
 					value="#{reservaCarrosBean.carro.modelo}" />
 				
 				<p:outputLabel value="Ano do Modelo: " for="anoModelo" />
-				<p:inputText id="anoModelo" size="4" maxlength="4"
+				<p:inputText id="anoModelo" size="4" maxlength="4" mask="9999" 
 					value="#{reservaCarrosBean.carro.anoModelo}" />
 				
 				<p:outputLabel value="Marca: " for="marca" />
@@ -132,7 +138,7 @@
 				</p:selectOneMenu>
 				
 				<p:outputLabel value="Ano de Fabricação: " for="anoFabricacao" />
-				<p:inputText id="anoFabricacao" mask="9999" 
+				<p:inputText id="anoFabricacao" size="4" maxlength="4" mask="9999" 
 					value="#{reservaCarrosBean.carro.anoFabricacao}" />
 				
 				<p:outputLabel value="Preco: " for="valor" />

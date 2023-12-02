@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+	<!-- template="WEB-INF/template/Layout.xhtml"> -->
+<h:head>
+
+<meta charset="UTF-8"/>
+<title>Car Reservation System</title>
+	
+<h:outputStylesheet library="projetointegrador" name="estilo.css"/>
+
+</h:head>
+
+<h:body>
+
+	<header>
+		<h:graphicImage library="projetointegrador" name="topo.png" />
+	</header>
+
+	<h2>
+		Usuários
+	</h2>
+
+	<div id="conteudo">
+		<f:metadata>
+			<f:viewAction action="#{reservaCarrosBean.todosUsuarios}" />
+		</f:metadata>	
+		
+		<h:form id="frmUser">
+			<p:messages id="messages"/>
+		
+			<p:toolbar id="toolbar">
+				<f:facet name="left">
+					<p:inputText id="termoPesquisa" placeholder="Digite aqui um termo para pesquisa..."
+						size="30" value="#{reservaCarrosBean.termoPesquisa}" />
+						
+					<span class="ui-separator">
+		        		<span class="ui-icon ui-icon-grip-dotted-vertical" />
+		        	</span>
+					
+					<p:commandButton value="Pesquisar" icon="fa fa-search"
+						actionListener="#{reservaCarrosBean.pesquisarUsuario}" update="usuariosDatatable messages"
+						process="@this termoPesquisa"/>
+					
+					<span class="ui-separator">
+		        		<span class="ui-icon ui-icon-grip-dotted-vertical" />
+		        	</span>
+		
+					<p:commandButton value="Novo" icon="fa fa-plus-square"
+						actionListener="#{reservaCarrosBean.prepararNovoUsuario}"
+						oncomplete="PF('usuarioDialogWidgetVar').show()" 
+						update="usuarioDialog" process="@this">
+						<p:resetInput target="usuarioDialog"/>
+					</p:commandButton>
+		
+					<span class="ui-separator">
+		        		<span class="ui-icon ui-icon-grip-dotted-vertical" />
+		        	</span>	
+					
+					<p:commandButton title="Editar" icon="fa fa-edit" 
+						disabled="#{not reservaCarrosBean.usuarioSelecionado}"
+						actionListener="#{reservaCarrosBean.prepararEdicaoUsuario}"
+						oncomplete="PF('usuarioDialogWidgetVar').show()" 
+						update="usuarioDialog messages" process="@this" >
+						<p:resetInput target="usuarioDialog"/>
+					</p:commandButton>
+					
+					<p:commandButton title="Excluir" icon="fa fa-trash" 
+						disabled="#{not reservaCarrosBean.usuarioSelecionado}"
+						actionListener="#{reservaCarrosBean.excluirUsuario}"
+						update="messages usuariosDatatable toolbar" 
+						process="@this" >
+						<p:confirm icon="ui-icon-alert" header="Confirmação de exclusão" 
+						message="Posso excluir o usuário?" />
+					</p:commandButton>
+					
+					<span class="ui-separator">
+		        		<span class="ui-icon ui-icon-grip-dotted-vertical" />
+		        	</span>		
+					
+					<p:commandButton value="Download" title="Download em PDF" icon="fa fa-file-pdf-o"
+						ajax="false">
+						<p:dataExporter type="pdf" target="usuariosDatatable" fileName="Usuarios"/>
+					</p:commandButton>
+					
+					<span class="ui-separator">
+		        		<span class="ui-icon ui-icon-grip-dotted-vertical" />
+		        	</span>	
+					
+					<p:commandLink value="Carros" action="SistemaReservaCarros?faces-redirect=true" />
+				</f:facet>
+			</p:toolbar>
+			
+			<p:spacer height="20px" />
+			
+			<p:dataTable id="usuariosDatatable" value="#{reservaCarrosBean.listaUsuarios}"
+				var="usuario" emptyMessage="Nenhuma informação a ser exibida"
+				paginator="true" rows="3" paginatorPosition="bottom"
+				selectionMode="single" selection="#{reservaCarrosBean.usuario}" rowKey="#{usuario.idUsuario}" >
+				
+				<p:ajax event="rowSelect" update="frmUser:toolbar" />
+				
+				<p:ajax event="rowUnselect" update="frmUser:toolbar" />
+				
+				<p:column headerText="Nome" sortBy="#{usuario.nome}" >
+					<h:outputText value="#{usuario.nome}"/>
+				</p:column>
+				
+				<p:column headerText="E-mail">
+					<h:outputText value="#{usuario.email}"/>
+				</p:column>
+			</p:dataTable>
+			
+			<!-- Dialog (modal) "Novo" -->
+			<p:dialog id="usuarioDialog" header="Novo usuario" widgetVar="usuarioDialogWidgetVar"
+				modal="true" resizable="false" closeOnEscape="true" >
+				<p:messages id="usuarioMessages" />
+				
+				<p:defaultCommand target="salvarCommandButton" scope="usuarioDialog" />
+				
+				<h:panelGrid id="usuarioPanelGrid" columns="2"
+					rendered="#{reservaCarrosBean.usuario ne null}" >
+					<p:outputLabel value="Nome: " for="nome" />
+					<p:inputText id="nome" size="50" maxlength="50"
+						value="#{reservaCarrosBean.usuario.nome}" />
+					
+					<p:outputLabel value="E-mail: " for="email" />
+					<p:inputText id="email" size="50" maxlength="50"
+						value="#{reservaCarrosBean.usuario.email}" />
+						
+					<p:outputLabel value="Senha: " for="senha" />
+					<p:inputText id="senha" size="50" maxlength="50"
+						value="#{reservaCarrosBean.usuario.senha}" />
+						
+					<p:outputLabel value="Ativo?[1/0]: " for="ativo" />
+					<p:inputText id="ativo" size="1" maxlength="1"
+						value="#{reservaCarrosBean.usuario.ativo}" />
+						
+					<p:outputLabel value="Data de Nascimento: " for="dataNascimento" />
+					<p:calendar id="dataNascimento" pattern="dd/MM/yyy" size="30" 
+					value="#{reservaCarrosBean.usuario.dataNascimento}" />
+					
+					<p:outputLabel />
+					<p:commandButton id="salvarCommandButton" value="Salvar" actionListener="#{reservaCarrosBean.salvarUsuario}" 
+						update="usuarioPanelGrid usuarioMessages" 
+						oncomplete="if (!args.ValidationFailed) PF('usuarioDialogWidgetVar').hide()" process="usuarioDialog" />
+				</h:panelGrid>
+
+				<p:confirmDialog global="true">
+					<p:commandButton value="Não" icon="fa fa-remove"
+						styleClass="ui-confirmdialog-no" />
+
+					<p:commandButton value="Sim" icon="fa fa-check"
+						styleClass="ui-confirmdialog-yes" />
+				</p:confirmDialog>
+			</p:dialog>
+		</h:form>
+	</div>
+
+	<footer> Projeto Integrador 4 - Sistema de Reserva de Carros </footer>
+
+</h:body>
+
+</html>

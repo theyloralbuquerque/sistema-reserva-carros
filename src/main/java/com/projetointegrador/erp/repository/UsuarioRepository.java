@@ -31,6 +31,10 @@ public class UsuarioRepository implements Serializable{
 		query.setParameter("nome", nome + "%");
 		return query.getResultList();
 	}
+	
+	public List<Usuario> todos() {
+		return manager.createQuery("from Usuario", Usuario.class).getResultList();
+	}
 
 	public Usuario guardar(Usuario usuario) {
 		return manager.merge(usuario);

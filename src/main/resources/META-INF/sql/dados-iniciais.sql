@@ -9,7 +9,7 @@ insert into carro (id_carro, marca, modelo, ano_fabricacao, ano_modelo, valor, d
 insert into carro (id_carro, marca, modelo, ano_fabricacao, ano_modelo, valor, descricao) values (9, 'HYUNDAI', 'HB20', 2014, 2014, 43671, 'Um hatch compacto da marca sul-coreana, que ganhou espaço no mercado brasileiro.');
 insert into carro (id_carro, marca, modelo, ano_fabricacao, ano_modelo, valor, descricao) values (10, 'FIAT', 'Toro', 2015, 2016, 89854, 'Uma picape compacta com design moderno e características que a tornam uma opção interessante para diferentes perfis de consumidores.');
 
-insert into usuario (id_usuario, email, senha, nome, ativo) values (1, 'joao@gmail.com', '12345678', 'João Silva Alves', 1);
-insert into usuario (id_usuario, email, senha, nome, ativo) values (2, 'maria@gmail.com', '12345678', 'Maria Silva Alves', 1);
-insert into usuario (id_usuario, email, senha, nome, ativo) values (3, 'ana@gmail.com', '12345678', 'Ana Silva Alves', 1);
-insert into usuario (id_usuario, email, senha, nome, ativo) values (4, 'carlos@gmail.com', '12345678', 'Carlos Alves', 1);
+insert into usuario (id_usuario, email, senha, nome, ativo, data_nascimento, data_cadastro) values (1, 'joao@gmail.com', '12345678', 'João Silva Alves', 1, '1998-08-10', '2020-01-01 10:01:18');
+insert into usuario (id_usuario, email, senha, nome, ativo, data_nascimento, data_cadastro) values (2, 'maria@gmail.com', '12345678', 'Maria Silva Alves', 1, '1997-08-10', '2020-02-01 10:01:18');
+insert into usuario (id_usuario, email, senha, nome, ativo, data_nascimento, data_cadastro) values (3, 'ana@gmail.com', '12345678', 'Ana Silva Alves', 1, '2000-08-10', '2020-03-01 10:01:18');
+insert into usuario (id_usuario, email, senha, nome, ativo, data_nascimento, data_cadastro) values (4, 'carlos@gmail.com', '12345678', 'Carlos Alves', 1, '2001-08-10', '2020-04-01 10:01:18');
