@@ -76,7 +76,36 @@
 	        		<span class="ui-icon ui-icon-grip-dotted-vertical" />
 	        	</span>	
 				
-				<p:commandLink value="Usuários" action="#{reservaCarrosBean.usuario}" />
+				<p:commandButton title="Detalhes" icon="fa fa-plus-square"
+					disabled="#{not reservaCarrosBean.carroSelecionado}"
+					actionListener="#{reservaCarrosBean.verDetalhes}"
+					oncomplete="PF('carroDetalhesDialogWidgetVar').show()"
+					update="carroDetalhes" process="@this" >
+				</p:commandButton>			
+				
+				<span class="ui-separator">
+	        		<span class="ui-icon ui-icon-grip-dotted-vertical" />
+	        	</span>
+	        	
+	        	<p:outputLabel />
+				<p:commandButton id="interesseCommandButton" title="Marcar Interesse" icon="fa fa-heart" 
+				disabled="#{not reservaCarrosBean.carroSelecionado}"
+				actionListener="#{reservaCarrosBean.prepararNovoCarroInteresse}" 
+				update="interessePanelGrid carroMessages" 
+				oncomplete="if (!args.ValidationFailed) PF('interesseDialogWidgetVar').show()" process="@this" />
+					
+				<span class="ui-separator">
+	        		<span class="ui-icon ui-icon-grip-dotted-vertical" />
+	        	</span>
+	        	
+				<p:commandLink value="Usuários" action="#{reservaCarrosBean.paginaUsuario}" />
+				
+				<span class="ui-separator">
+	        		<span class="ui-icon ui-icon-grip-dotted-vertical" />
+	        	</span>
+			
+				<p:commandLink value="Carros com Interesse" action="#{reservaCarrosBean.paginaCarroInteresse}" />
+				
 			</f:facet>
 		</p:toolbar>
 	
@@ -105,10 +134,6 @@
 			
 			<p:column headerText="Preço" sortBy="#{carro.valor}" >
 				<h:outputText value="#{carro.valor}"/>
-			</p:column>
-			
-			<p:column headerText="Descrição">
-				<h:outputText value="#{carro.descricao}"/>
 			</p:column>
 		</p:dataTable>
 		
@@ -156,6 +181,62 @@
 				<p:commandButton id="salvarCommandButton" value="Salvar" actionListener="#{reservaCarrosBean.salvar}" 
 					update="carroPanelGrid carroMessages" 
 					oncomplete="if (!args.ValidationFailed) PF('carroDialogWidgetVar').hide()" process="carroDialog" />
+			</h:panelGrid>
+		</p:dialog>
+		
+		<!-- Dialog (modal) "Novo" -->
+		<p:dialog id="carroDetalhes" header="Detalhes do Carro" widgetVar="carroDetalhesDialogWidgetVar"
+			modal="true" resizable="false" closeOnEscape="true" >
+			<h:panelGrid id="carroDetalhesPanelGrid" columns="2"
+				rendered="#{reservaCarrosBean.carro ne null}" >
+				
+				<p:outputLabel value="ID: " />
+				<p:outputLabel value="#{reservaCarrosBean.carro.idCarro}" />
+				
+				<p:outputLabel value="Modelo: " />
+				<p:outputLabel value="#{reservaCarrosBean.carro.modelo}" />
+				
+				<p:outputLabel value="Ano do Modelo: " />
+				<p:outputLabel value="#{reservaCarrosBean.carro.anoModelo}" />
+				
+				<p:outputLabel value="Marca: "/>
+				<p:outputLabel value="#{reservaCarrosBean.carro.marca}" />
+
+				<p:outputLabel value="Ano de Fabricação: "/>
+				<p:outputLabel value="#{reservaCarrosBean.carro.anoFabricacao}" />
+				
+				<p:outputLabel value="Preço: "/>
+				<h:panelGroup>
+					<p:outputLabel value="#{reservaCarrosBean.carro.valor}" >
+						<f:convertNumber pattern="#,##0.00" />
+					</p:outputLabel>
+				</h:panelGroup>
+				
+				<p:outputLabel value="Descrição: " for="descricao" />
+				<p:outputLabel size="80" maxlength="200"
+					value="#{reservaCarrosBean.carro.descricao}" />
+			</h:panelGrid>
+		</p:dialog>
+		
+		<p:dialog id="interesseDialog" header="Dados do Interessado" widgetVar="interesseDialogWidgetVar"
+			modal="true" resizable="false" closeOnEscape="true" >
+			<h:panelGrid id="interessePanelGrid" columns="2">
+			<p:messages id="carroInteresseMessages" />
+			
+			<p:defaultCommand target="salvarInteresseCommandButton" scope="interesseDialog" />
+
+				<p:outputLabel value="Nome: " />
+				<p:inputText id="nome" size="50" maxlength="50"
+					value="#{reservaCarrosBean.carroInteresse.nomeInteressado}" />
+						
+				<p:outputLabel value="WhatsApp: " />
+				<p:inputText id="whatsapp" size="11" maxlength="11"
+					value="#{reservaCarrosBean.carroInteresse.whatsapp}" />
+					
+				<p:outputLabel />
+				<p:commandButton id="salvarInteresseCommandButton" value="Salvar" actionListener="#{reservaCarrosBean.salvarInteresse}" 
+					update="interessePanelGrid carroInteresseMessages" 
+					oncomplete="if (!args.ValidationFailed) PF('interesseDialogWidgetVar').hide()" process="interessePanelGrid" />
 			</h:panelGrid>
 		</p:dialog>
 	</h:form>

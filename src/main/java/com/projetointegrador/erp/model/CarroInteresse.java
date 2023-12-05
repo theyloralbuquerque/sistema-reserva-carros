@@ -10,58 +10,57 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Digits;
-import javax.validation.constraints.NotNull;
-
-import org.hibernate.validator.constraints.NotEmpty;
 
 @Entity
-@Table(name = "carro")
-public class Carro implements Serializable {
+@Table(name = "carro_interesse")
+public class CarroInteresse implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id_carro")
-	private Long idCarro;
+	@Column(name = "id_interessado")
+	private Long idInteressado;
 	
-	@NotNull
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false, length = 30)
 	private MarcaCarro marca;
 	
-	@NotEmpty
 	@Column(name = "modelo", nullable = false, length = 20)
 	private String modelo;
 	
-	@NotNull
 	@Column(name = "ano_fabricacao", nullable = false)
 	@Digits(integer = 4, fraction = 0)
 	private Integer anoFabricacao;
-	
-	@NotNull
+
 	@Column(name = "ano_modelo", nullable = false)
 	@Digits(integer = 4, fraction = 0)
 	private Integer anoModelo;
 	
-	@NotNull
 	private Double valor;
 	
-	@NotEmpty
 	@Column(name = "descricao", length = 200)
 	private String descricao;
 	
-	@OneToOne(mappedBy = "idCarro")
-	private CarroInteresse interessado;
+	@Column(name = "nome_interessado", length = 50)
+	private String nomeInteressado;
+
+	@Column(name = "whatsapp", length = 11)
+	private String whatsapp;
 	
-	public Long getIdCarro() {
-		return idCarro;
+	@OneToOne // one-para-um.
+	@JoinColumn(name = "id_carro") // Define a coluna id_carro como FK na tabela Carro.
+	private Carro idCarro;
+	
+	public Long getIdInteressado() {
+		return idInteressado;
 	}
 	
-	public void setIdCarro(Long idCarro) {
-		this.idCarro = idCarro;
+	public void setIdInteressadoo(Long idInteressado) {
+		this.idInteressado = idInteressado;
 	}
 	
 	public MarcaCarro getMarca() {
@@ -113,9 +112,25 @@ public class Carro implements Serializable {
 		this.descricao = descricao;
 	}
 	
+	public String getNomeInteressado() {
+		return nomeInteressado;
+	}
+
+	public void setNomeInteressado(String nomeInteressado) {
+		this.nomeInteressado = nomeInteressado;
+	}
+
+	public String getWhatsapp() {
+		return whatsapp;
+	}
+
+	public void setWhatsapp(String whatsapp) {
+		this.whatsapp = whatsapp;
+	}
+
 	@Override
 	public int hashCode() {
-		return Objects.hash(idCarro);
+		return Objects.hash(idInteressado);
 	}
 	
 	@Override
@@ -126,7 +141,7 @@ public class Carro implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Carro other = (Carro) obj;
-		return Objects.equals(idCarro, other.idCarro);
+		CarroInteresse other = (CarroInteresse) obj;
+		return Objects.equals(idInteressado, other.idInteressado);
 	}
 }

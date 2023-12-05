@@ -12,10 +12,13 @@ import javax.inject.Named;
 import org.primefaces.context.RequestContext;
 
 import com.projetointegrador.erp.model.Carro;
+import com.projetointegrador.erp.model.CarroInteresse;
 import com.projetointegrador.erp.model.MarcaCarro;
 import com.projetointegrador.erp.model.Usuario;
+import com.projetointegrador.erp.repository.CarroInteresseRepository;
 import com.projetointegrador.erp.repository.CarroRepository;
 import com.projetointegrador.erp.repository.UsuarioRepository;
+import com.projetointegrador.erp.service.CadastroCarroInteresseService;
 import com.projetointegrador.erp.service.CadastroCarroService;
 import com.projetointegrador.erp.service.CadastroUsuarioService;
 import com.projetointegrador.erp.util.FacesMessages;
@@ -33,10 +36,16 @@ public class ReservaCarrosBean implements Serializable{
 	private CadastroUsuarioService cadastroUsuarioService;
 	
 	@Inject
+	private CadastroCarroInteresseService cadastroCarroInteresseService;
+	
+	@Inject
 	private CarroRepository carroRepository;
 	
 	@Inject
 	private UsuarioRepository usuarioRepository;
+
+	@Inject
+	private CarroInteresseRepository carroInteresseRepository;
 	
 	@Inject
 	private FacesMessages messages;
@@ -45,12 +54,16 @@ public class ReservaCarrosBean implements Serializable{
 	
 	private List<Usuario> listaUsuarios;
 	
+	private List<CarroInteresse> listaCarroInteresse;
+	
 	private String termoPesquisa;
 	
 	private Carro carro;
 	
 	private Usuario usuario;
 	
+	private CarroInteresse carroInteresse = new CarroInteresse();
+
 	public void prepararNovoCarro() {
 		carro = new Carro();
 	}
@@ -59,12 +72,45 @@ public class ReservaCarrosBean implements Serializable{
 		usuario = new Usuario();
 	}
 	
+	public void prepararNovoCarroInteresse() {
+		carroInteresse = new CarroInteresse();
+	}
+	
 	public void prepararEdicao() {
 		carro = carroRepository.porId(carro.getIdCarro());
 	}
 	
 	public void prepararEdicaoUsuario() {
 		usuario = usuarioRepository.porId(usuario.getIdUsuario());
+	}
+	
+	public void verDetalhes() {
+		carro = carroRepository.porId(carro.getIdCarro());
+	}
+	
+	public void salvarInteresse() {
+		
+		conversor();
+		
+		cadastroCarroInteresseService.salvar(carroInteresse);
+		
+		atualizarRegistros();
+		
+		messages.info("Interesse salvo com sucesso!");
+		
+		RequestContext.getCurrentInstance().update(Arrays.asList(
+				"frm:carrosDatatable", "frm:messages"));
+	}
+	
+	public CarroInteresse conversor() {
+		carroInteresse.setAnoModelo(carro.getAnoModelo());
+		carroInteresse.setMarca(carro.getMarca());
+		carroInteresse.setModelo(carro.getModelo());
+		carroInteresse.setValor(carro.getValor());
+		carroInteresse.setAnoFabricacao(carro.getAnoFabricacao());
+		carroInteresse.setDescricao(carro.getDescricao());
+
+		return carroInteresse;
 	}
 	
 	public void salvar() {
@@ -130,12 +176,24 @@ public class ReservaCarrosBean implements Serializable{
 		}
 	}
 	
+	public void pesquisarCarroInteresse() {
+		listaCarroInteresse = carroInteresseRepository.pesquisar(termoPesquisa);
+		
+		if (listaCarroInteresse.isEmpty()) {
+			messages.info("Sua consulta não retornou registros.");
+		}
+	}
+	
 	public void todosCarros() {
 		listaCarros = carroRepository.todos();
 	}
 	
 	public void todosUsuarios() {
 		listaUsuarios = usuarioRepository.todos();
+	}
+	
+	public void todosCarrosInteresse() {
+		listaCarroInteresse = carroInteresseRepository.todos();
 	}
 	
 	private void atualizarRegistros() {
@@ -194,16 +252,37 @@ public class ReservaCarrosBean implements Serializable{
 	public Usuario getUsuario() {
 		return usuario;
 	}
-
+	
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
 	}
-	
+
 	public boolean isUsuarioSelecionado() {
 		return usuario != null && usuario.getIdUsuario() != null;
 	}
 
-	public String usuario() {
+	public String paginaUsuario() {
 		return "Usuario?faces-redirect=true";
 	}
+	
+	public String paginaCarros() {
+		return "SistemaReservaCarros?faces-redirect=true";
+	}
+	
+	public String paginaCarroInteresse() {
+		return "CarroInteresse?faces-redirect=true";
+	}
+
+	public CarroInteresse getCarroInteresse() {
+		return carroInteresse;
+	}
+
+	public void setCarroInteresse(CarroInteresse carroInteresse) {
+		this.carroInteresse = carroInteresse;
+	}
+
+	public List<CarroInteresse> getListaCarroInteresse() {
+		return listaCarroInteresse;
+	}
+	
 }

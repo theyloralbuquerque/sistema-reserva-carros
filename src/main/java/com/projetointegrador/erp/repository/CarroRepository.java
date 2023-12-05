@@ -33,7 +33,7 @@ public class CarroRepository implements Serializable{
 	}
 	
 	public List<Carro> todos() {
-		return manager.createQuery("from Carro", Carro.class).getResultList();
+		return manager.createQuery("SELECT c FROM Carro c ", Carro.class).getResultList();
 	}
 
 	public Carro guardar(Carro carro) {

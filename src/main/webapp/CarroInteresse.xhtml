@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+	<!-- template="WEB-INF/template/Layout.xhtml"> -->
+<h:head>
+
+<meta charset="UTF-8"/>
+<title>Car Reservation System</title>
+	
+<h:outputStylesheet library="projetointegrador" name="estilo.css"/>
+
+</h:head>
+
+<h:body>
+
+	<header>
+		<h:graphicImage library="projetointegrador" name="topo.png" />
+	</header>
+
+	<h2>
+		Carros com Interessados
+	</h2>
+
+	<div id="conteudo">
+		<f:metadata>
+			<f:viewAction action="#{reservaCarrosBean.todosCarrosInteresse}" />
+		</f:metadata>	
+		
+		<h:form id="frmCarroInteresse">
+			<p:messages id="messages"/>
+		
+			<p:toolbar id="toolbar">
+				<f:facet name="left">
+					<p:inputText id="termoPesquisa" placeholder="Digite aqui um termo para pesquisa..."
+						size="30" value="#{reservaCarrosBean.termoPesquisa}" />
+						
+					<span class="ui-separator">
+		        		<span class="ui-icon ui-icon-grip-dotted-vertical" />
+		        	</span>
+					
+					<p:commandButton value="Pesquisar" icon="fa fa-search"
+						actionListener="#{reservaCarrosBean.pesquisarCarroInteresse}" update="carrosInteresseDatatable messages"
+						process="@this termoPesquisa"/>
+					
+					<span class="ui-separator">
+		        		<span class="ui-icon ui-icon-grip-dotted-vertical" />
+		        	</span>
+					
+					<p:commandButton value="Download" title="Download em PDF" icon="fa fa-file-pdf-o"
+						ajax="false">
+						<p:dataExporter type="pdf" target="carrosInteresseDatatable" fileName="CarrosInteresse"/>
+					</p:commandButton>
+					
+					<span class="ui-separator">
+		        		<span class="ui-icon ui-icon-grip-dotted-vertical" />
+		        	</span>	
+					
+					<p:commandLink value="Carros" action="SistemaReservaCarros?faces-redirect=true" />
+					
+					<span class="ui-separator">
+		        		<span class="ui-icon ui-icon-grip-dotted-vertical" />
+		        	</span>	
+					
+					<p:commandLink value="Usuários" action="Usuarios?faces-redirect=true" />
+				</f:facet>
+			</p:toolbar>
+			
+			<p:spacer height="20px" />
+			
+			<p:dataTable id="carrosInteresseDatatable" value="#{reservaCarrosBean.listaCarroInteresse}"
+				var="carroInteresse" emptyMessage="Nenhuma informação a ser exibida"
+				paginator="true" rows="3" paginatorPosition="bottom"
+				selectionMode="single" selection="#{reservaCarrosBean.carroInteresse}" rowKey="#{carroInteresse.idInteressado}" >
+				
+				<p:ajax event="rowSelect" update="frmCarroInteresse:toolbar" />
+				
+				<p:ajax event="rowUnselect" update="frmCarroInteresse:toolbar" />
+				
+				<p:column headerText="Nome do Interessado" sortBy="#{carroInteresse.nomeInteressado}" >
+					<h:outputText value="#{carroInteresse.nomeInteressado}"/>
+				</p:column>
+				
+				<p:column headerText="Whatsapp">
+					<h:outputText value="#{carroInteresse.whatsapp}"/>
+				</p:column>
+				
+				<p:column headerText="Carro">
+					<h:outputText value="#{carroInteresse.modelo}"/>
+				</p:column>
+				
+				<p:column headerText="Ano do Modelo">
+					<h:outputText value="#{carroInteresse.anoModelo}"/>
+				</p:column>
+			</p:dataTable>
+		</h:form>
+	</div>
+
+	<footer> Projeto Integrador 4 - Sistema de Reserva de Carros </footer>
+
+</h:body>
+
+</html>
